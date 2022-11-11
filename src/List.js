@@ -8,6 +8,8 @@ import styled from "@emotion/styled";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import TextField from "@mui/material/TextField";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 import { Stack } from "@mui/material";
@@ -25,7 +27,7 @@ const Item = styled.div`
 export default function List() {
   const [list, setList] = useRecoilState(listState);
 
-  const handleChange = useCallback(
+  const handleCheckBoxChange = useCallback(
     (e) => {
       setList((curr) => {
         const checked = e.target.checked;
@@ -61,24 +63,41 @@ export default function List() {
     });
   });
 
+  const handleDateTimeChange = useCallback((e, label) => {
+    console.info("handleDateTimeChange ", e);
+    setList((curr) => {
+      const editing = false;
+
+      const next = curr.map((item) => ({
+        ...item,
+        label: item.label,
+        editing: item.label === label ? editing : item.editing,
+      }));
+      console.info("state ", next);
+      return next;
+    });
+  }, []);
+
   return (
     <Stack spacing={1}>
       {list.map((item) => {
         return (
           <Item key={item.label}>
             {item.editing ? (
-              <DateTimePicker
-                label="Date&Time picker"
-                value={item.label}
-                onChange={handleChange}
-                renderInput={(params) => <TextField {...params} />}
-              />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DateTimePicker
+                  label="Date&Time picker"
+                  value={item.label}
+                  onChange={(e) => handleDateTimeChange(e, item.label)}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
             ) : (
               <FormControlLabel
                 control={
                   <Checkbox
                     checked={item.checked}
-                    onChange={handleChange}
+                    onChange={handleCheckBoxChange}
                     inputProps={{
                       "aria-label": "controlled",
                     }}
