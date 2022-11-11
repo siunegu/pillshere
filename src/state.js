@@ -26,12 +26,13 @@ const nextTimestamps = Array(4)
 
 const defaultValue = nextTimestamps.map((timestamp) => ({
   label: timestamp,
-  checked: false
+  checked: false,
+  editing: false,
 }));
 
 const localStorageValue = JSON.parse(window.localStorage.getItem(LS_KEY_NAME));
 
 export const listState = atom({
   key: "list", // unique ID (with respect to other atoms/selectors)
-  default: localStorageValue ?? defaultValue
+  default: localStorageValue ?? defaultValue,
 });
