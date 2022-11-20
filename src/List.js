@@ -7,14 +7,12 @@ import styled from "@emotion/styled";
 
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import TextField from "@mui/material/TextField";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import DateTimePicker from "react-datetime-picker";
 
 import { Stack } from "@mui/material";
 
-import { listState, LS_KEY_NAME } from "./state";
+import { listState, LS_KEY_NAME, DAYJS_FORMAT } from "./state";
+import dayjs from "dayjs";
 
 const Item = styled.div`
   margin: 0;
@@ -48,30 +46,30 @@ export default function List() {
   );
 
   const handleEdit = useLongPress((e, { context }) => {
-    console.log("Long pressed!", e, context);
     setList((curr) => {
-      const label = context;
-      const editing = true;
+      const key = context;
 
       const next = curr.map((item) => ({
         ...item,
         label: item.label,
-        editing: item.label === label ? editing : item.editing,
+        editing: item.key === key ? !item.editing : item.editing,
       }));
-      console.info("state ", next);
+
       return next;
     });
   });
 
-  const handleDateTimeChange = useCallback((e, label) => {
-    console.info("handleDateTimeChange ", e);
+  const handleDateTimeChange = useCallback((value, key) => {
+    console.info("handleDateTimeChange ", value, key);
     setList((curr) => {
-      const editing = false;
-
       const next = curr.map((item) => ({
         ...item,
-        label: item.label,
-        editing: item.label === label ? editing : item.editing,
+        ...(item.key === key
+          ? {
+              time: dayjs(value),
+              label: dayjs(value).format(DAYJS_FORMAT),
+            }
+          : null),
       }));
       console.info("state ", next);
       return next;
@@ -82,16 +80,13 @@ export default function List() {
     <Stack spacing={1}>
       {list.map((item) => {
         return (
-          <Item key={item.label}>
+          <Item key={item.key} {...handleEdit(item.key)}>
             {item.editing ? (
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateTimePicker
-                  label="Date&Time picker"
-                  value={item.label}
-                  onChange={(e) => handleDateTimeChange(e, item.label)}
-                  renderInput={(params) => <TextField {...params} />}
-                />
-              </LocalizationProvider>
+              <DateTimePicker
+                onChange={(e) => handleDateTimeChange(e, item.key)}
+                value={dayjs(item.time).toDate()}
+                disableClock
+              />
             ) : (
               <FormControlLabel
                 control={
@@ -104,7 +99,6 @@ export default function List() {
                   />
                 }
                 label={item.label}
-                {...handleEdit(item.label)}
               />
             )}
           </Item>
