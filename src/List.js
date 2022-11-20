@@ -60,7 +60,6 @@ export default function List() {
   });
 
   const handleDateTimeChange = useCallback((value, key) => {
-    console.info("handleDateTimeChange ", value, key);
     setList((curr) => {
       const next = curr.map((item) => ({
         ...item,
@@ -71,7 +70,9 @@ export default function List() {
             }
           : null),
       }));
-      console.info("state ", next);
+
+      window.localStorage.setItem(LS_KEY_NAME, JSON.stringify(next));
+
       return next;
     });
   }, []);
