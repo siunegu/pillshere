@@ -13,10 +13,12 @@
     "@emotion/styled": "latest",
     "@mui/material": "latest",
     "dayjs": "1.11.0",
-    "react": "latest",
-    "react-dom": "latest",
+    "react": "^18.2.0",
+    "react-datetime-picker": "^4.1.1",
+    "react-dom": "^18.2.0",
     "react-scripts": "latest",
-    "recoil": "0.7.6"
+    "recoil": "0.7.6",
+    "use-long-press": "^2.0.2"
   },
   "browserslist": {
     "production": [
