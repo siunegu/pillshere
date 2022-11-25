@@ -15,11 +15,17 @@ import { listState, LS_KEY_NAME, DAYJS_FORMAT } from "./state";
 import dayjs from "dayjs";
 
 const Item = styled.div`
+  display: flex;
+  justify-content: center;
   margin: 0;
   padding: 8;
   &:hover {
     background-color: aliceblue;
   }
+`;
+
+const DateTimeWrapper = styled.div`
+  padding: 8px 0;
 `;
 
 export default function List() {
@@ -83,11 +89,15 @@ export default function List() {
         return (
           <Item key={item.key} {...handleEdit(item.key)}>
             {item.editing ? (
-              <DateTimePicker
-                onChange={(e) => handleDateTimeChange(e, item.key)}
-                value={dayjs(item.time).toDate()}
-                disableClock
-              />
+              <DateTimeWrapper>
+                <DateTimePicker
+                  onChange={(e) => handleDateTimeChange(e, item.key)}
+                  value={dayjs(item.time).toDate()}
+                  calendarIcon={null}
+                  disableClock
+                  closeWidgets
+                />
+              </DateTimeWrapper>
             ) : (
               <FormControlLabel
                 control={
