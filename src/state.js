@@ -26,7 +26,7 @@ const defaultValue = nextTimes.map((time) => ({
   label: time.format(DAYJS_FORMAT),
   checked: false,
   editing: false,
-  key: `${Math.random() * 100}-${time}`,
+  key: `${new Date(time).getTime()}`,
 }));
 
 const localStorageValue = JSON.parse(window.localStorage.getItem(LS_KEY_NAME));
