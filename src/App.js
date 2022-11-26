@@ -15,13 +15,6 @@ import { listState, LS_KEY_NAME } from "./state";
 
 const Background = styled.div`
   height: 100vh;
-  background: rgb(255, 255, 255);
-  background: linear-gradient(
-    0deg,
-    rgba(255, 255, 255, 1) 0%,
-    rgba(255, 138, 138, 1) 69%,
-    rgba(128, 34, 255, 1) 100%
-  );
 `;
 
 const ColoredGradientText = styled.span`
