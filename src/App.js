@@ -7,9 +7,33 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Link from "@mui/material/Link";
 
+import styled from "@emotion/styled";
+
 import List from "./List";
 
 import { listState, LS_KEY_NAME } from "./state";
+
+const Background = styled.div`
+  height: 100vh;
+  background: rgb(255, 255, 255);
+  background: linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 138, 138, 1) 69%,
+    rgba(128, 34, 255, 1) 100%
+  );
+`;
+
+const ColoredGradientText = styled.span`
+  background: rgb(63, 94, 251);
+  background: linear-gradient(
+    270deg,
+    rgba(63, 94, 251, 1) 0%,
+    rgba(252, 70, 107, 1) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+`;
 
 function Copyright() {
   return (
@@ -30,20 +54,23 @@ function Reminder() {
       variant="body2"
       noWrap={false}
       color="text.secondary"
-      align="center"
+      align="left"
       sx={{
         margin: "0 auto 64px",
-        maxWidth: "250px",
+        maxWidth: "235px",
       }}
     >
-      <em>
-        Pills <strong>HERE</strong>!
-      </em>{" "}
       <span role="img" aria-label="pill-emoji">
         💊
       </span>{" "}
+      <ColoredGradientText>
+        <em>
+          PILLS <strong>HERE!</strong>
+        </em>
+      </ColoredGradientText>{" "}
       <br />
-      Remember to take your medication!
+      This tool aims to give you a hand at remembering you have taken any
+      medications last.
     </Typography>
   );
 }
@@ -65,7 +92,7 @@ function ConnectedApp() {
   });
 
   return (
-    <>
+    <Background>
       <Box
         sx={{
           padding: 8,
@@ -79,7 +106,7 @@ function ConnectedApp() {
       </Box>
       <Reminder />
       <Copyright />
-    </>
+    </Background>
   );
 }
 
