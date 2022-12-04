@@ -1,9 +1,10 @@
 import * as React from "react";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useRecoilState } from "recoil";
 import { useLongPress } from "use-long-press";
 
 import styled from "@emotion/styled";
+import { css, keyframes } from "@emotion/react";
 
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
@@ -35,8 +36,50 @@ const DateTimeWrapper = styled.div`
   }
 `;
 
+const fadeIn = keyframes`
+   from {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+    to { opacity: 1 }
+`;
+
+const fadeInStyles = css`
+  animation: ${fadeIn} 500ms cubic-bezier(0.25, 0.21, 0.21, 0.8);
+`;
+
+const FadeIn = styled.div`
+  ${fadeInStyles}
+`;
+
+const DateTimePortal = styled.div`
+  position: fixed;
+  bottom: 10%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+
+  .react-calendar {
+    border: none;
+
+    ${fadeInStyles}
+
+    padding: 24px;
+    border-radius: 24px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+      rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+  }
+`;
+
 export default function List() {
   const [list, setList] = useRecoilState(listState);
+
+  // This is so we can get the reference of the portal element
+  const [portalContainerEl, setPortalContainerEl] = useState(null);
+  const handleContainerRef = useCallback((node) => {
+    setPortalContainerEl(node);
+
+    return node;
+  }, []);
 
   const handleCheckBoxChange = useCallback(
     (e) => {
@@ -97,46 +140,50 @@ export default function List() {
   }, []);
 
   return (
-    <Stack spacing={1}>
-      {list.map((item) => {
-        return (
-          <Item key={item.key} {...handleEditLongPress(item.key)}>
-            {item.editing ? (
-              <DateTimeWrapper>
-                <DateTimePicker
-                  onChange={(e) => handleDateTimeChange(e, item.key)}
-                  value={dayjs(item.time).toDate()}
-                  calendarIcon={null}
-                  clearIcon={null}
-                  disableClock
-                  closeWidgets
-                />
-                <IconButton
-                  color="primary"
-                  aria-label="Confirm date time change"
-                  component="label"
-                  onClick={() => handleEdit(item.key)}
-                >
-                  👌
-                </IconButton>
-              </DateTimeWrapper>
-            ) : (
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={item.checked}
-                    onChange={handleCheckBoxChange}
-                    inputProps={{
-                      "aria-label": "controlled",
-                    }}
+    <>
+      <Stack spacing={1}>
+        {list.map((item) => {
+          return (
+            <Item key={item.key} {...handleEditLongPress(item.key)}>
+              {item.editing ? (
+                <DateTimeWrapper>
+                  <DateTimePicker
+                    onChange={(e) => handleDateTimeChange(e, item.key)}
+                    value={dayjs(item.time).toDate()}
+                    calendarIcon={null}
+                    clearIcon={null}
+                    portalContainer={portalContainerEl}
+                    disableClock
+                    closeWidgets
                   />
-                }
-                label={item.label}
-              />
-            )}
-          </Item>
-        );
-      })}
-    </Stack>
+                  <IconButton
+                    color="primary"
+                    aria-label="Confirm date time change"
+                    component="label"
+                    onClick={() => handleEdit(item.key)}
+                  >
+                    👌
+                  </IconButton>
+                </DateTimeWrapper>
+              ) : (
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={item.checked}
+                      onChange={handleCheckBoxChange}
+                      inputProps={{
+                        "aria-label": "controlled",
+                      }}
+                    />
+                  }
+                  label={item.label}
+                />
+              )}
+            </Item>
+          );
+        })}
+      </Stack>
+      <DateTimePortal ref={handleContainerRef} />
+    </>
   );
 }
