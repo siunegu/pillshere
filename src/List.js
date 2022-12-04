@@ -167,16 +167,16 @@ export default function List() {
                 </DateTimeWrapper>
               ) : (
                 <FormControlLabel
+                  label={item.label}
+                  checked={item.checked}
+                  onChange={handleCheckBoxChange}
                   control={
                     <Checkbox
-                      checked={item.checked}
-                      onChange={handleCheckBoxChange}
                       inputProps={{
                         "aria-label": "controlled",
                       }}
                     />
                   }
-                  label={item.label}
                 />
               )}
             </Item>
