@@ -6,8 +6,6 @@ import { useLongPress } from "use-long-press";
 import styled from "@emotion/styled";
 import { css, keyframes } from "@emotion/react";
 
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import DateTimePicker from "react-datetime-picker";
 
@@ -16,12 +14,22 @@ import { Stack } from "@mui/material";
 import { listState, LS_KEY_NAME, DAYJS_FORMAT } from "./state";
 import dayjs from "dayjs";
 
+const Checkbox = styled.div`
+  display: grid;
+  gap: 6px;
+  grid-auto-flow: column;
+  align-content: center;
+  justify-content: space-around;
+  align-items: center;
+`;
+
 const Item = styled.div`
   display: flex;
   justify-content: flex-start;
   height: 42px;
+  min-width: 225px;
   margin: 0;
-  padding: 8;
+
   &:hover {
     background-color: aliceblue;
   }
@@ -89,7 +97,6 @@ export default function List() {
 
         const next = curr.map((item) => ({
           ...item,
-          label: item.label,
           checked: item.label === label ? checked : item.checked,
         }));
 
@@ -166,18 +173,16 @@ export default function List() {
                   </IconButton>
                 </DateTimeWrapper>
               ) : (
-                <FormControlLabel
-                  label={item.label}
-                  checked={item.checked}
-                  onChange={handleCheckBoxChange}
-                  control={
-                    <Checkbox
-                      inputProps={{
-                        "aria-label": "controlled",
-                      }}
-                    />
-                  }
-                />
+                <Checkbox>
+                  <input
+                    type="checkbox"
+                    id={item.label}
+                    name={item.label}
+                    checked={item.checked}
+                    onChange={handleCheckBoxChange}
+                  />
+                  <label htmlFor={item.label}>{item.label}</label>
+                </Checkbox>
               )}
             </Item>
           );
