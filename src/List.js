@@ -45,7 +45,7 @@ const fadeIn = keyframes`
 `;
 
 const fadeInStyles = css`
-  animation: ${fadeIn} 500ms cubic-bezier(0.25, 0.21, 0.21, 0.8);
+  animation: ${fadeIn} 450ms cubic-bezier(0.25, 0.21, 0.21, 0.8);
 `;
 
 const FadeIn = styled.div`
@@ -154,7 +154,7 @@ export default function List() {
                     clearIcon={null}
                     portalContainer={portalContainerEl}
                     disableClock
-                    closeWidgets
+                    closeWidgets={false}
                   />
                   <IconButton
                     color="primary"
