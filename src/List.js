@@ -6,10 +6,14 @@ import { useLongPress } from "use-long-press";
 import styled from "@emotion/styled";
 import { css, keyframes } from "@emotion/react";
 
+import Box from "@mui/material/Box";
+
+import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
+import Button from "@mui/material/Button";
 import DateTimePicker from "react-datetime-picker";
 
-import { Stack } from "@mui/material";
+import { Grid, Stack, Typography } from "@mui/material";
 
 import { listState, LS_KEY_NAME, DAYJS_FORMAT } from "./state";
 import dayjs from "dayjs";
@@ -146,47 +150,77 @@ export default function List() {
     });
   }, []);
 
+  const handleSetInterval = useCallback(() => {});
+
   return (
     <>
       <Stack spacing={1}>
-        {list.map((item) => {
-          return (
-            <Item key={item.key} {...handleEditLongPress(item.key)}>
-              {item.editing ? (
-                <DateTimeWrapper>
-                  <DateTimePicker
-                    onChange={(e) => handleDateTimeChange(e, item.key)}
-                    value={dayjs(item.time).toDate()}
-                    calendarIcon={null}
-                    clearIcon={null}
-                    portalContainer={portalContainerEl}
-                    disableClock
-                    closeWidgets={false}
-                  />
-                  <IconButton
-                    color="primary"
-                    aria-label="Confirm date time change"
-                    component="label"
-                    onClick={() => handleEdit(item.key)}
-                  >
-                    👌
-                  </IconButton>
-                </DateTimeWrapper>
-              ) : (
-                <Checkbox>
-                  <input
-                    type="checkbox"
-                    id={item.label}
-                    name={item.label}
-                    checked={item.checked}
-                    onChange={handleCheckBoxChange}
-                  />
-                  <label htmlFor={item.label}>{item.label}</label>
-                </Checkbox>
-              )}
-            </Item>
-          );
-        })}
+        {list.length ? (
+          list.map((item) => {
+            return (
+              <Item key={item.key} {...handleEditLongPress(item.key)}>
+                {item.editing ? (
+                  <DateTimeWrapper>
+                    <DateTimePicker
+                      onChange={(e) => handleDateTimeChange(e, item.key)}
+                      value={dayjs(item.time).toDate()}
+                      calendarIcon={null}
+                      clearIcon={null}
+                      portalContainer={portalContainerEl}
+                      disableClock
+                      closeWidgets={false}
+                    />
+                    <IconButton
+                      color="primary"
+                      aria-label="Confirm date time change"
+                      component="label"
+                      onClick={() => handleEdit(item.key)}
+                    >
+                      👌
+                    </IconButton>
+                  </DateTimeWrapper>
+                ) : (
+                  <Checkbox>
+                    <input
+                      type="checkbox"
+                      id={item.label}
+                      name={item.label}
+                      checked={item.checked}
+                      onChange={handleCheckBoxChange}
+                    />
+                    <label htmlFor={item.label}>{item.label}</label>
+                  </Checkbox>
+                )}
+              </Item>
+            );
+          })
+        ) : (
+          <Stack spacing={2}>
+            <Typography
+              variant="body2"
+              noWrap={false}
+              color="text.secondary"
+              align="left"
+            >
+              * Cleared * - WIP
+            </Typography>
+
+            <Stack spacing={1}>
+              <TextField
+                id="outlined-number"
+                label="Hours between?"
+                type="number"
+                size="small"
+                disabled
+              />
+              <Box xs={8}>
+                <Button variant="text" onClick={handleSetInterval} disabled>
+                  ⏰ Setup times
+                </Button>
+              </Box>
+            </Stack>
+          </Stack>
+        )}
       </Stack>
       <DateTimePortal ref={handleContainerRef} />
     </>

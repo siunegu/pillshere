@@ -10,8 +10,10 @@ import Link from "@mui/material/Link";
 import styled from "@emotion/styled";
 
 import List from "./List";
+import Controls from "./Controls";
 
 import { listState, LS_KEY_NAME } from "./state";
+import { Stack } from "@mui/system";
 
 const Background = styled.div`
   height: 100vh;
@@ -43,28 +45,46 @@ function Copyright() {
 
 function Reminder() {
   return (
-    <Typography
-      variant="body2"
-      noWrap={false}
-      color="text.secondary"
-      align="left"
+    <Box
       sx={{
-        margin: "0 auto 64px",
+        margin: "64px auto 64px",
         maxWidth: "235px",
       }}
     >
-      <span role="img" aria-label="pill-emoji">
-        💊
-      </span>{" "}
-      <ColoredGradientText>
-        <em>
-          PILLS <strong>HERE!</strong>
-        </em>
-      </ColoredGradientText>{" "}
-      <br />
-      This tool aims to give you a hand at remembering you have taken any
-      medications last.
-    </Typography>
+      <Typography
+        variant="body2"
+        noWrap={false}
+        color="text.secondary"
+        align="left"
+      >
+        <span role="img" aria-label="pill-emoji">
+          💊
+        </span>{" "}
+        <ColoredGradientText>
+          <em>
+            PILLS <strong>HERE!</strong>
+          </em>
+        </ColoredGradientText>{" "}
+        <br />
+        <br />
+        <strong>What is this?</strong>
+        <br />
+        Reminding you when your last pills were taken.
+      </Typography>
+      <Typography
+        variant="body2"
+        noWrap={false}
+        color="text.secondary"
+        align="left"
+      >
+        <br />
+        <strong>How do I use this?</strong>
+        <br />* Pressing "All Done" will reset the current times and get the
+        next ones based on the current time.
+        <br />* Check off times when you are done.
+        {/* </ul> */}
+      </Typography>
+    </Box>
   );
 }
 
@@ -95,10 +115,13 @@ function ConnectedApp() {
         }}
         {...blurEdit}
       >
-        <List />
+        <Stack sx={{ gap: "24px" }}>
+          <List />
+          <Controls />
+          <Reminder />
+          <Copyright />
+        </Stack>
       </Box>
-      <Reminder />
-      <Copyright />
     </Background>
   );
 }
